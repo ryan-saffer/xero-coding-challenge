@@ -40,7 +40,7 @@ class CheckedListItem : LinearLayout, Checkable {
         addView(checkBox, 0)
         setOnClickListener {
             checkBox.toggle()
-            viewModel.selectItem(this.matchItem)
+            viewModel.toggleItem(this.matchItem)
         }
     }
 

@@ -15,8 +15,6 @@ import com.xero.interview.bankrecmatchmaker.R;
 
 public class FindMatchActivity extends AppCompatActivity {
 
-    public static final String TARGET_MATCH_VALUE = "com.xero.interview.target_match_value";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,9 +31,6 @@ public class FindMatchActivity extends AppCompatActivity {
             actionBar.setTitle(R.string.title_find_match);
         }
 
-        float target = getIntent().getFloatExtra(TARGET_MATCH_VALUE, 10000f);
-        matchText.setText(getString(R.string.select_matches, (int) target));
-
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -48,6 +43,9 @@ public class FindMatchActivity extends AppCompatActivity {
         viewModel.getItems().observe(this, adapter::updateMatchItems);
         viewModel.getSelectedItems().observe(this, items -> {
             adapter.updateSelectedItems(items);
+        });
+        viewModel.getTargetMatchValue().observe(this, targetMatchValue -> {
+            matchText.setText(getString(R.string.select_matches, (int) targetMatchValue.floatValue()));
         });
     }
 }

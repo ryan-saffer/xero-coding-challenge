@@ -7,6 +7,13 @@ import com.xero.interview.bankrecmatchmaker.model.MatchItem
 
 class MatcherViewModel : ViewModel() {
 
+    companion object {
+        const val DEFAULT_TARGET_MATCH_VALUE = 10_000f;
+    }
+
+    private val _targetMatchValue = MutableLiveData(DEFAULT_TARGET_MATCH_VALUE)
+    val targetMatchValue: LiveData<Float> get() = _targetMatchValue
+
     private val _items = MutableLiveData(buildMockData())
     val items: LiveData<List<MatchItem>> get() = _items
 
@@ -15,13 +22,16 @@ class MatcherViewModel : ViewModel() {
 
     /**
      * Adds an item to the list of selected items, or removes it if it's already in there.
+     * Updates the target match value.
      */
-    fun selectItem(matchItem: MatchItem) {
+    fun toggleItem(matchItem: MatchItem) {
         val currentMap = _selectedItems.value ?: hashMapOf()
         if (currentMap.containsKey(matchItem.id)) {
             currentMap.remove(matchItem.id)
+            _targetMatchValue.value = _targetMatchValue.value!! + matchItem.total
         } else {
             currentMap[matchItem.id] = matchItem
+            _targetMatchValue.value = _targetMatchValue.value!! - matchItem.total
         }
         _selectedItems.value = currentMap
     }
