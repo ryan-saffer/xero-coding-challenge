@@ -1,4 +1,4 @@
-package com.xero.interview.bankrecmatchmaker.view
+package com.xero.interview.bankrecmatchmaker.RecMatcher.view
 
 import android.content.Context
 import android.util.AttributeSet
@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.widget.Checkable
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatCheckBox
-import com.xero.interview.bankrecmatchmaker.MatcherViewModel
+import com.xero.interview.bankrecmatchmaker.RecMatcher.MatcherViewModel
 import com.xero.interview.bankrecmatchmaker.R
-import com.xero.interview.bankrecmatchmaker.model.MatchItem
+import com.xero.interview.bankrecmatchmaker.RecMatcher.model.MatchItem
 
 class CheckedListItem : LinearLayout, Checkable {
 

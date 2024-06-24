@@ -1,4 +1,4 @@
-package com.xero.interview.bankrecmatchmaker.view;
+package com.xero.interview.bankrecmatchmaker.RecMatcher.view;
 
 import android.os.Bundle;
 import android.widget.TextView;
@@ -10,9 +10,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.xero.interview.bankrecmatchmaker.MatcherViewModel;
+import com.xero.interview.bankrecmatchmaker.RecMatcher.MatcherViewModel;
 import com.xero.interview.bankrecmatchmaker.R;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class FindMatchActivity extends AppCompatActivity {
 
     @Override
