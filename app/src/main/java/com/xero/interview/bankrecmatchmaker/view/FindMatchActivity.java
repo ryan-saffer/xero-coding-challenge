@@ -47,7 +47,7 @@ public class FindMatchActivity extends AppCompatActivity {
         // Viewmodel listeners
         viewModel.getItems().observe(this, adapter::updateMatchItems);
         viewModel.getSelectedItems().observe(this, items -> {
-            System.out.println("Selected Items:" + items.toString());
+            adapter.updateSelectedItems(items);
         });
     }
 }

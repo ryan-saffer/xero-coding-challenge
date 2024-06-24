@@ -36,7 +36,9 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
             subtextRight = itemView.findViewById(R.id.text_sub_right);
         }
 
-        public void bind(MatchItem matchItem) {
+        public void bind(MatchItem matchItem, Boolean isChecked) {
+            checkedListItem.setChecked(isChecked);
+
             mainText.setText(matchItem.getPaidTo());
             total.setText(Float.toString(matchItem.getTotal()));
             subtextLeft.setText(matchItem.getTransactionDate());
@@ -58,6 +60,10 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
         this.matchItems = items;
     }
 
+    public void updateSelectedItems(HashMap<String, MatchItem> selectedItems) {
+        this.selectedItems = selectedItems;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
@@ -69,7 +75,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         MatchItem matchItem = matchItems.get(position);
-        holder.bind(matchItem);
+        holder.bind(matchItem, this.selectedItems.containsKey(matchItem.getId()));
     }
 
     @Override
