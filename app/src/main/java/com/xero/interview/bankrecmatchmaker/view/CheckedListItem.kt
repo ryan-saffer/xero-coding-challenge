@@ -6,8 +6,6 @@ import android.view.LayoutInflater
 import android.widget.Checkable
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatCheckBox
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModelProvider
 import com.xero.interview.bankrecmatchmaker.MatcherViewModel
 import com.xero.interview.bankrecmatchmaker.R
 import com.xero.interview.bankrecmatchmaker.model.MatchItem
@@ -16,7 +14,7 @@ class CheckedListItem : LinearLayout, Checkable {
 
     private lateinit var viewModel: MatcherViewModel
     private lateinit var matchItem: MatchItem
-    private var checkBox: AppCompatCheckBox? = null
+    private lateinit var checkBox: AppCompatCheckBox
 
     constructor(context: Context) : super(context) {
         init(context)
@@ -41,6 +39,7 @@ class CheckedListItem : LinearLayout, Checkable {
             layoutInflater.inflate(R.layout.list_item_checkbox, this, false) as AppCompatCheckBox
         addView(checkBox, 0)
         setOnClickListener {
+            checkBox.toggle()
             viewModel.selectItem(this.matchItem)
         }
     }
@@ -54,14 +53,14 @@ class CheckedListItem : LinearLayout, Checkable {
     }
 
     override fun setChecked(checked: Boolean) {
-        checkBox!!.isChecked = checked
+        checkBox.isChecked = checked
     }
 
     override fun isChecked(): Boolean {
-        return viewModel.selectedItems.value?.containsKey(matchItem.id) ?: false
+        return checkBox.isChecked;
     }
 
     override fun toggle() {
-        viewModel.selectItem(this.matchItem)
+        checkBox.toggle()
     }
 }

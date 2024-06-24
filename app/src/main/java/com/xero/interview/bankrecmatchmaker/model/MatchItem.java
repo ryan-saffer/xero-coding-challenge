@@ -1,5 +1,7 @@
 package com.xero.interview.bankrecmatchmaker.model;
 
+import androidx.annotation.NonNull;
+
 public class MatchItem {
 
     private final String id;
@@ -37,4 +39,9 @@ public class MatchItem {
         return docType;
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+        return this.getPaidTo();
+    }
 }
