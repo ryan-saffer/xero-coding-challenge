@@ -10,35 +10,34 @@ class MatcherViewModel : ViewModel() {
     private val _items = MutableLiveData(buildMockData())
     val items: LiveData<List<MatchItem>> get() = _items
 
-    private val _selectedItems = MutableLiveData(setOf<MatchItem>())
-    val selectedItems: LiveData<Set<MatchItem>> get() = _selectedItems
+    private val _selectedItems = MutableLiveData(hashMapOf<String, MatchItem>())
+    val selectedItems: LiveData<HashMap<String, MatchItem>> get() = _selectedItems
 
     /**
      * Adds an item to the list of selected items, or removes it if it's already in there.
      */
-    fun selectItem(item: MatchItem) {
-        // TODO: work out why `.value` here is nullable. It should not be, given the live data is initialised with a list.
-        val currentSet = _selectedItems.value?.toMutableSet() ?: mutableSetOf()
-        if (currentSet.contains(item)) {
-            currentSet.remove(item)
+    fun selectItem(matchItem: MatchItem) {
+        val currentMap = _selectedItems.value ?: hashMapOf()
+        if (currentMap.containsKey(matchItem.id)) {
+            currentMap.remove(matchItem.id)
         } else {
-            currentSet.add(item)
+            currentMap[matchItem.id] = matchItem
         }
-        _selectedItems.value = currentSet
+        _selectedItems.value = currentMap
     }
 
     private fun buildMockData(): List<MatchItem> {
         return listOf(
-            MatchItem("City Limousines", "30 Aug", 249.00f, "Sales Invoice"),
-            MatchItem("Ridgeway University", "12 Sep", 618.50f, "Sales Invoice"),
-            MatchItem("Cube Land", "22 Sep", 495.00f, "Sales Invoice"),
-            MatchItem("Bayside Club", "23 Sep", 234.00f, "Sales Invoice"),
-            MatchItem("SMART Agency", "12 Sep", 250f, "Sales Invoice"),
-            MatchItem("PowerDirect", "11 Sep", 108.60f, "Sales Invoice"),
-            MatchItem("PC Complete", "17 Sep", 216.99f, "Sales Invoice"),
-            MatchItem("Truxton Properties", "17 Sep", 181.25f, "Sales Invoice"),
-            MatchItem("MCO Cleaning Services", "17 Sep", 170.50f, "Sales Invoice"),
-            MatchItem("Gateway Motors", "18 Sep", 411.35f, "Sales Invoice"),
+            MatchItem("1", "City Limousines", "30 Aug", 249.00f, "Sales Invoice"),
+            MatchItem("2", "Ridgeway University", "12 Sep", 618.50f, "Sales Invoice"),
+            MatchItem("3", "Cube Land", "22 Sep", 495.00f, "Sales Invoice"),
+            MatchItem("4", "Bayside Club", "23 Sep", 234.00f, "Sales Invoice"),
+            MatchItem("5", "SMART Agency", "12 Sep", 250f, "Sales Invoice"),
+            MatchItem("6", "PowerDirect", "11 Sep", 108.60f, "Sales Invoice"),
+            MatchItem("7", "PC Complete", "17 Sep", 216.99f, "Sales Invoice"),
+            MatchItem("8", "Truxton Properties", "17 Sep", 181.25f, "Sales Invoice"),
+            MatchItem("9", "MCO Cleaning Services", "17 Sep", 170.50f, "Sales Invoice"),
+            MatchItem("10", "Gateway Motors", "18 Sep", 411.35f, "Sales Invoice"),
         )
     }
 }

@@ -13,6 +13,7 @@ import com.xero.interview.bankrecmatchmaker.model.MatchItem;
 import com.xero.interview.bankrecmatchmaker.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -52,7 +53,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
 
     private MatcherViewModel viewModel;
     private List<MatchItem> matchItems = new ArrayList<>();
-    private Set<MatchItem> selectedItems = new HashSet<>();
+    private HashMap<String, MatchItem> selectedItems = new HashMap();
 
 
     public MatchAdapter(MatcherViewModel viewModel) {
@@ -64,7 +65,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
-    public void updateSelectedItems(Set<MatchItem> selectedItems) {
+    public void updateSelectedItems(HashMap<String, MatchItem> selectedItems) {
         this.selectedItems = selectedItems;
         notifyDataSetChanged();
     }
@@ -80,7 +81,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         MatchItem matchItem = matchItems.get(position);
-        Boolean isChecked = selectedItems.contains(matchItem);
+        Boolean isChecked = selectedItems.containsKey(matchItem.getId());
         holder.bind(matchItem, isChecked);
     }
 

@@ -58,7 +58,7 @@ class CheckedListItem : LinearLayout, Checkable {
     }
 
     override fun isChecked(): Boolean {
-        return viewModel.selectedItems.value?.contains(this.matchItem) ?: false
+        return viewModel.selectedItems.value?.containsKey(matchItem.id) ?: false
     }
 
     override fun toggle() {
