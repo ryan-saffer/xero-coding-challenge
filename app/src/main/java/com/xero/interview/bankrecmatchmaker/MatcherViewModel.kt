@@ -10,8 +10,22 @@ class MatcherViewModel : ViewModel() {
     private val _items = MutableLiveData(buildMockData())
     val items: LiveData<List<MatchItem>> get() = _items
 
-    private val _selectedItems = MutableLiveData(listOf<MatchItem>())
-    val selectedItems: LiveData<List<MatchItem>> get() = _selectedItems
+    private val _selectedItems = MutableLiveData(setOf<MatchItem>())
+    val selectedItems: LiveData<Set<MatchItem>> get() = _selectedItems
+
+    /**
+     * Adds an item to the list of selected items, or removes it if it's already in there.
+     */
+    fun selectItem(item: MatchItem) {
+        // TODO: work out why `.value` here is nullable. It should not be, given the live data is initialised with a list.
+        val currentSet = _selectedItems.value?.toMutableSet() ?: mutableSetOf()
+        if (currentSet.contains(item)) {
+            currentSet.remove(item)
+        } else {
+            currentSet.add(item)
+        }
+        _selectedItems.value = currentSet
+    }
 
     private fun buildMockData(): List<MatchItem> {
         return listOf(

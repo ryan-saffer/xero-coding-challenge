@@ -39,15 +39,13 @@ public class FindMatchActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // ViewModel init
         MatcherViewModel viewModel = new ViewModelProvider(this).get(MatcherViewModel.class);
 
-        // ViewModel listeners
-        viewModel.getItems().observe(this, items -> {
-            final MatchAdapter adapter = new MatchAdapter(items);
-            recyclerView.setAdapter(adapter);
-        });
+        final MatchAdapter adapter = new MatchAdapter(viewModel);
+        recyclerView.setAdapter(adapter);
 
-        viewModel.getSelectedItems().observe(this, System.out::println);
+        // Viewmodel listeners
+        viewModel.getItems().observe(this, adapter::updateMatchItems);
+        viewModel.getSelectedItems().observe(this, adapter::updateSelectedItems);
     }
 }
