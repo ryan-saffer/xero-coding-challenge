@@ -9,9 +9,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name="com.xero.interview.bankrecmatchmaker.FindMatchActivity"
-                android:theme="@style/AppTheme.NoActionBar"
-                android:exported="true">
+        <activity
+            android:name="com.xero.interview.bankrecmatchmaker.view.FindMatchActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

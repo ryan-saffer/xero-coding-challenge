@@ -1,12 +1,17 @@
-package com.xero.interview.bankrecmatchmaker;
+package com.xero.interview.bankrecmatchmaker.view;
 
 import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.xero.interview.bankrecmatchmaker.MatcherViewModel;
+import com.xero.interview.bankrecmatchmaker.model.MatchItem;
+import com.xero.interview.bankrecmatchmaker.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,25 +39,20 @@ public class FindMatchActivity extends AppCompatActivity {
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        List<MatchItem> items = buildMockData();
-        final MatchAdapter adapter = new MatchAdapter(items);
-        
-        recyclerView.setAdapter(adapter);
+
+        // ViewModel init
+        MatcherViewModel viewModel = new ViewModelProvider(this).get(MatcherViewModel.class);
+
+        // ViewModel listeners
+        viewModel.getItems().observe(this, items -> {
+            final MatchAdapter adapter = new MatchAdapter(items);
+            recyclerView.setAdapter(adapter);
+        });
+
+        viewModel.getSelectedItems().observe(this, selectedItems -> {
+            System.out.println(selectedItems);
+        });
     }
 
-    private List<MatchItem> buildMockData() {
-        List<MatchItem> items = new ArrayList<>();
-        items.add(new MatchItem("City Limousines", "30 Aug", 249.00f, "Sales Invoice"));
-        items.add(new MatchItem("Ridgeway University", "12 Sep", 618.50f, "Sales Invoice"));
-        items.add(new MatchItem("Cube Land", "22 Sep", 495.00f, "Sales Invoice"));
-        items.add(new MatchItem("Bayside Club", "23 Sep", 234.00f, "Sales Invoice"));
-        items.add(new MatchItem("SMART Agency", "12 Sep", 250f, "Sales Invoice"));
-        items.add(new MatchItem("PowerDirect", "11 Sep", 108.60f, "Sales Invoice"));
-        items.add(new MatchItem("PC Complete", "17 Sep", 216.99f, "Sales Invoice"));
-        items.add(new MatchItem("Truxton Properties", "17 Sep", 181.25f, "Sales Invoice"));
-        items.add(new MatchItem("MCO Cleaning Services", "17 Sep", 170.50f, "Sales Invoice"));
-        items.add(new MatchItem("Gateway Motors", "18 Sep", 411.35f, "Sales Invoice"));
-        return items;
-    }
 
 }

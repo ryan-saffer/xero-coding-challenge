@@ -1,4 +1,4 @@
-package com.xero.interview.bankrecmatchmaker
+package com.xero.interview.bankrecmatchmaker.view
 
 import android.content.Context
 import android.util.AttributeSet
@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.widget.Checkable
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatCheckBox
+import com.xero.interview.bankrecmatchmaker.R
 
 class CheckedListItem : LinearLayout, Checkable {
     private var checkBox: AppCompatCheckBox? = null
@@ -18,14 +19,19 @@ class CheckedListItem : LinearLayout, Checkable {
         init(context)
     }
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         init(context)
     }
 
     private fun init(context: Context) {
         val layoutInflater = LayoutInflater.from(context)
         orientation = HORIZONTAL
-        checkBox = layoutInflater.inflate(R.layout.list_item_checkbox, this, false) as AppCompatCheckBox
+        checkBox =
+            layoutInflater.inflate(R.layout.list_item_checkbox, this, false) as AppCompatCheckBox
         addView(checkBox, 0)
         setOnClickListener { checkBox!!.toggle() }
     }

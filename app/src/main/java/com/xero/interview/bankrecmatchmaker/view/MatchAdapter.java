@@ -1,4 +1,4 @@
-package com.xero.interview.bankrecmatchmaker;
+package com.xero.interview.bankrecmatchmaker.view;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -6,6 +6,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.xero.interview.bankrecmatchmaker.model.MatchItem;
+import com.xero.interview.bankrecmatchmaker.R;
 
 import java.util.List;
 
