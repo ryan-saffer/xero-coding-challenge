@@ -1,7 +1,9 @@
 package com.xero.interview.bankrecmatchmaker
 
-import com.xero.interview.bankrecmatchmaker.RecMatcher.repositories.RecRepository
-import com.xero.interview.bankrecmatchmaker.RecMatcher.repositories.RecRepositoryImpl
+import com.xero.interview.bankrecmatchmaker.recmatcher.repositories.RecRepository
+import com.xero.interview.bankrecmatchmaker.recmatcher.repositories.RecRepositoryImpl
+import com.xero.interview.bankrecmatchmaker.recmatcher.repositories.RecAutoMatcherRepository
+import com.xero.interview.bankrecmatchmaker.recmatcher.repositories.RecAutoMatcherRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,5 +18,11 @@ object AppModule {
     @Singleton
     fun provideRecRepository(): RecRepository {
         return RecRepositoryImpl()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRecoAutoMatcherRepository(): RecAutoMatcherRepository {
+        return RecAutoMatcherRepositoryImpl()
     }
 }

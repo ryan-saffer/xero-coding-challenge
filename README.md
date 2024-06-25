@@ -1,11 +1,20 @@
+# Solution
+
+# Task
+
+---
+
 ## Hi
 
 You are going through a technical interview with us at Xero, how exciting!
 
-The purpose of this exercise is to get you building something that solves an actual customer problem, lets you
-think through it and start on it on your own, so that you can come in and walk us through your solution.
+The purpose of this exercise is to get you building something that solves an actual customer
+problem, lets you
+think through it and start on it on your own, so that you can come in and walk us through your
+solution.
 
 ## Overview
+
 One of the core daily interactions that users have with the Xero mobile application is bank
 reconciliation, where bank transactions are matched against the corresponding accounting records
 (Invoices, Bills, etc.).
@@ -16,6 +25,7 @@ records sum to be an exact match, then the user has to find and select them them
 Surely there is a better way!
 
 ## Goals
+
 If you run the application in this project you will see a single activity which displays a list of
 accounting records and the total amount of a transaction at the top, there's not much else to it!
 
@@ -31,13 +41,12 @@ interview.
 2. When the activity opens initially, select a single transaction that matches remaining total
    automatically if any.
 
-
 ### Thought Experiment
 
 We'd also like you to THINK ABOUT how we could achieve the following functionality:
-   When a subset of the accounting records sum to be an exact match of the remaining total, then
-   automatically select them. You don't need to write any code here. We will aim to explore your 
-   thinking and design when you come in.
+When a subset of the accounting records sum to be an exact match of the remaining total, then
+automatically select them. You don't need to write any code here. We will aim to explore your
+thinking and design when you come in.
 
 ## Hints
 

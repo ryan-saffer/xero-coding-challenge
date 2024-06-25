@@ -1,4 +1,4 @@
-package com.xero.interview.bankrecmatchmaker.RecMatcher.model;
+package com.xero.interview.bankrecmatchmaker.recmatcher.model;
 
 import androidx.annotation.NonNull;
 

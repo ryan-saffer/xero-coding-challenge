@@ -1,9 +1,11 @@
 package com.xero.interview.bankrecmatchmaker
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.xero.interview.bankrecmatchmaker.RecMatcher.MatcherViewModel
-import com.xero.interview.bankrecmatchmaker.RecMatcher.model.MatchItem
-import com.xero.interview.bankrecmatchmaker.RecMatcher.repositories.RecRepository
+import com.xero.interview.bankrecmatchmaker.recmatcher.MatcherViewModel
+import com.xero.interview.bankrecmatchmaker.recmatcher.model.MatchItem
+import com.xero.interview.bankrecmatchmaker.recmatcher.repositories.RecAutoMatcherRepository
+import com.xero.interview.bankrecmatchmaker.recmatcher.repositories.RecRepository
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
@@ -13,7 +15,6 @@ class MatcherViewModelTest {
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()
 
-
     val testItems = listOf(
         MatchItem("1", "Paid to 1", "Date 1", 100f, "docType1"),
         MatchItem("2", "Paid to 2", "Date 2", 200f, "docType2"),
@@ -22,12 +23,24 @@ class MatcherViewModelTest {
         MatchItem("5", "Paid to 5", "Date 5", 500f, "docType5")
     )
 
+    private val mockRecRepository = object : RecRepository {
+        override fun getMatchTargetValue() = 10_000f
+        override fun getMatchItems() = testItems
+    }
+
+    private val mockRecAutoMatcherRepository = object : RecAutoMatcherRepository {
+        override fun findSingleMatch(matchItems: List<MatchItem>, targetValue: Float) = null
+    }
+
+    private fun createTestSubject(
+        recRepository: RecRepository = mockRecRepository,
+        recAutoMatcherRepository: RecAutoMatcherRepository = mockRecAutoMatcherRepository
+    ) = MatcherViewModel(recRepository, recAutoMatcherRepository)
+
     @Test
     fun givenViewModelCreated_thenItemsCorrectlySet() {
         // given
-        val testSubject = MatcherViewModel(object : RecRepository {
-            override fun getMatchItems() = testItems
-        })
+        val testSubject = createTestSubject()
 
         // then
         testSubject.items.value!!.first().apply {
@@ -43,9 +56,7 @@ class MatcherViewModelTest {
     @Test
     fun givenViewModelCreated_thenSelectedItemsIsEmpty() {
         // given
-        val testSubject = MatcherViewModel(object : RecRepository {
-            override fun getMatchItems() = testItems
-        })
+        val testSubject = createTestSubject()
 
         // then
         assert(testSubject.selectedItems.value.isNullOrEmpty())
@@ -54,9 +65,7 @@ class MatcherViewModelTest {
     @Test
     fun givenListOfItems_whenSingleItemToggled_thenMapCorrectlyUpdated() {
         // given
-        val testSubject = MatcherViewModel(object : RecRepository {
-            override fun getMatchItems() = testItems
-        })
+        val testSubject = createTestSubject()
 
         // when
         testSubject.toggleItem(testItems[0])
@@ -75,9 +84,7 @@ class MatcherViewModelTest {
     @Test
     fun givenListOfItems_whenManyItemsToggled_thenMapCorrectlyUpdated() {
         // given
-        val testSubject = MatcherViewModel(object : RecRepository {
-            override fun getMatchItems() = testItems
-        })
+        val testSubject = createTestSubject()
 
         // then
         assert(testSubject.selectedItems.value!!.isEmpty())
@@ -113,11 +120,9 @@ class MatcherViewModelTest {
     @Test
     fun givenListOfItems_whenItemsToggled_targetMatchValueChanges() {
         // given
-        val testSubject = MatcherViewModel(object : RecRepository {
-            override fun getMatchItems() = testItems
-        })
+        val testSubject = createTestSubject()
 
-        // then - target match value is default of 10,000
+        // then - target match value is initialised according to mock repository
         assert(testSubject.targetMatchValue.value == 10_000f)
 
         // when
@@ -138,12 +143,13 @@ class MatcherViewModelTest {
     }
 
     @Test
-    fun givenListOfItems_whenItemWithAmountHigherThanTargetMatch_thenItGoesIntoNegatives() {
+    fun givenListOfItems_whenTogglingItemWithAmountHigherThanTargetMatch_thenItGoesIntoNegatives() {
         // given
-        val testSubject = MatcherViewModel(object : RecRepository {
-            override fun getMatchItems() = testItems
-        })
-        testSubject.setTargetMatchValue(500f)
+        val testSubject =
+            createTestSubject(recRepository = object : RecRepository by mockRecRepository {
+                override fun getMatchTargetValue() = 500f
+            })
+
 
         // when
         testSubject.toggleItem(testItems[2]) // removes 300
@@ -151,5 +157,45 @@ class MatcherViewModelTest {
 
         // then
         assert(testSubject.targetMatchValue.value == -200f)
+    }
+
+    @Test
+    fun givenNoSingleMatchExists_whenAutoMatchingSingleItem_thenSelectedItemsIsEmpty_andTargetValueUnchanged() {
+        // given
+        val testSubject = createTestSubject(
+            recAutoMatcherRepository = object : RecAutoMatcherRepository {
+                override fun findSingleMatch(
+                    matchItems: List<MatchItem>,
+                    targetValue: Float
+                ) = null
+            }
+        )
+
+        // then
+        assert(testSubject.selectedItems.value!!.isEmpty())
+
+        // target value is unchanged
+        assert(testSubject.targetMatchValue.value == 10_000f)
+    }
+
+    @Test
+    fun givenSingleMatchExists_whenAutoMatchingSingleItem_thenSelectedItemsIncludesIt_andTargetValueSetToZero() {
+        // given
+        val testSubject = createTestSubject(
+            recAutoMatcherRepository = object : RecAutoMatcherRepository {
+                override fun findSingleMatch(
+                    matchItems: List<MatchItem>,
+                    targetValue: Float
+                ) = testItems.first()
+            }
+        )
+
+        // then
+        assert(testSubject.selectedItems.value!!.size == 1)
+        assert(testSubject.selectedItems.value!!.containsKey("1"))
+        assert(testSubject.selectedItems.value!!["1"] == testItems.first())
+
+        // target value has been set to 0
+        assert(testSubject.targetMatchValue.value == 0f)
     }
 }

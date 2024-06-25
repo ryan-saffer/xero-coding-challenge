@@ -1,34 +1,28 @@
-package com.xero.interview.bankrecmatchmaker.RecMatcher
+package com.xero.interview.bankrecmatchmaker.recmatcher
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.xero.interview.bankrecmatchmaker.RecMatcher.model.MatchItem
-import com.xero.interview.bankrecmatchmaker.RecMatcher.repositories.RecRepository
+import com.xero.interview.bankrecmatchmaker.recmatcher.model.MatchItem
+import com.xero.interview.bankrecmatchmaker.recmatcher.repositories.RecRepository
+import com.xero.interview.bankrecmatchmaker.recmatcher.repositories.RecAutoMatcherRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class MatcherViewModel @Inject constructor(
     private val recRepository: RecRepository,
+    private val recAutoMatcherRepository: RecAutoMatcherRepository
 ) : ViewModel(
 ) {
 
-    companion object {
-        const val DEFAULT_TARGET_MATCH_VALUE = 10_000f;
-    }
-
-    private val _targetMatchValue = MutableLiveData(DEFAULT_TARGET_MATCH_VALUE)
+    private val _targetMatchValue = MutableLiveData(recRepository.getMatchTargetValue())
     val targetMatchValue: LiveData<Float> get() = _targetMatchValue
-
-    fun setTargetMatchValue(targetMatchValue: Float) {
-        this._targetMatchValue.value = targetMatchValue
-    }
 
     private val _items = MutableLiveData(recRepository.getMatchItems())
     val items: LiveData<List<MatchItem>> get() = _items
 
-    private val _selectedItems = MutableLiveData(hashMapOf<String, MatchItem>())
+    private val _selectedItems = MutableLiveData(this.autoMatchItem() ?: hashMapOf())
     val selectedItems: LiveData<HashMap<String, MatchItem>> get() = _selectedItems
 
     /**
@@ -45,5 +39,18 @@ class MatcherViewModel @Inject constructor(
             _targetMatchValue.value = _targetMatchValue.value!! - matchItem.total
         }
         _selectedItems.value = currentMap
+    }
+
+    private fun autoMatchItem(): HashMap<String, MatchItem>? {
+        val matchItem =
+            recAutoMatcherRepository.findSingleMatch(_items.value!!, _targetMatchValue.value!!)
+        return if (matchItem == null) {
+            null
+        } else {
+            _targetMatchValue.value = 0f
+            hashMapOf<String, MatchItem>().apply {
+                this[matchItem.id] = matchItem
+            }
+        }
     }
 }
