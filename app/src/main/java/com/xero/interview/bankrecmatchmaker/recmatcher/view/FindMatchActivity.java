@@ -44,11 +44,8 @@ public class FindMatchActivity extends AppCompatActivity {
 
         // Viewmodel listeners
         viewModel.getItems().observe(this, adapter::updateMatchItems);
-        viewModel.getSelectedItems().observe(this, items -> {
-            adapter.updateSelectedItems(items);
-        });
-        viewModel.getTargetMatchValue().observe(this, targetMatchValue -> {
-            matchText.setText(getString(R.string.select_matches, (int) targetMatchValue.floatValue()));
-        });
+        viewModel.getTargetMatchValue().observe(this, targetMatchValue ->
+                matchText.setText(getString(R.string.select_matches, (int) targetMatchValue.floatValue()))
+        );
     }
 }

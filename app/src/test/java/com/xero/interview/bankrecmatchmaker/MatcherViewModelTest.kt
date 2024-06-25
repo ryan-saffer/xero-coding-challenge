@@ -5,10 +5,11 @@ import com.xero.interview.bankrecmatchmaker.recmatcher.MatcherViewModel
 import com.xero.interview.bankrecmatchmaker.recmatcher.model.MatchItem
 import com.xero.interview.bankrecmatchmaker.recmatcher.repositories.RecAutoMatcherRepository
 import com.xero.interview.bankrecmatchmaker.recmatcher.repositories.RecRepository
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 
 class MatcherViewModelTest {
 
@@ -60,6 +61,31 @@ class MatcherViewModelTest {
 
         // then
         assert(testSubject.selectedItems.value.isNullOrEmpty())
+    }
+
+    @Test
+    fun givenMatchItemNotSelected_whenCheckingIfSelected_thenReturnFalse() {
+        // given
+        val testSubject = createTestSubject()
+
+        // when
+        val result = testSubject.isItemSelected(testItems[0])
+
+        // then
+        assertFalse(result)
+    }
+
+    @Test
+    fun givenMatchItemSelected_whenCheckingIfSelected_thenReturnTrue() {
+        // given
+        val testSubject = createTestSubject()
+        testSubject.toggleItem(testItems[0])
+
+        // when
+        val result = testSubject.isItemSelected(testItems[0])
+
+        // then
+        assertTrue(result)
     }
 
     @Test
