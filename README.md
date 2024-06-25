@@ -41,11 +41,13 @@ mocked in the ViewModel tests.
 This project includes two repositories:
 
 - `RecRepository` - this repository deals with getting the reconciliation items and the target match
-  value. It does not include any unit tests at the moment given it's extremely simplicity, however
+  value. It does not include any unit tests at the moment given it's simplicity, however
   if I was to fetch the reconciliation items from a server for example, then it would need unit
   tests.
-- `RecAutoMatcherRepository` - this repository deals with matching reconciliation item. Currently it
-  includes one method to a single transaction that matches the remaining total, if any (Goal #2).
+- `RecAutoMatcherRepository` - this repository deals with matching reconciliation items. Currently
+  it
+  includes one method to find a single transaction that matches the remaining total, if any (Goal
+  #2).
   This repository is unit tested, and is where I would place the 'Thought Experiment' to match
   multiple items.
 
